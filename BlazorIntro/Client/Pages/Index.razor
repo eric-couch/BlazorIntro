@@ -1,9 +1,18 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+@if (User?.FavoriteMovies is not null) {
+    <h2>Favorite Movies</h2>
+    <ul>
+        @if (MovieDetails is not null)
+        {
+        
+            @foreach (var movie in MovieDetails)
+            {
+                @*<li>@movie.imdbId</li>*@
+            <li>@movie.Title (@movie.Year)<br />Actors (@movie.Actors)<br />
+                <a href="https://www.imdb.com/title/(@movie.imdbID)"><img src="@movie.Poster" height="120" /></a>  </li>
+            
+            }
+        }  
+    </ul>
+}
