@@ -1,18 +1,21 @@
 ﻿@page "/"
 
+
 @if (User?.FavoriteMovies is not null) {
     <h2>Favorite Movies</h2>
     <ul>
         @if (MovieDetails is not null)
         {
-        
             @foreach (var movie in MovieDetails)
             {
-                @*<li>@movie.imdbId</li>*@
-            <li>@movie.Title (@movie.Year)<br />Actors (@movie.Actors)<br />
-                <a href="https://www.imdb.com/title/(@movie.imdbID)"><img src="@movie.Poster" height="120" /></a>  </li>
-            
+                <li><a href="#" @onclick="@(() => ShowMovieDetails(movie))"
+           @onclick:preventDefault="true" style="text-decoration:none;color:black;">
+                    @movie.Title (@movie.Year)<br />Actors (@movie.Actors)</a>
+                </li>
             }
         }  
     </ul>
+    @if (MovieAllDetails is not null) {
+        <MovieDetails Movie="MovieAllDetails" />
+    }
 }

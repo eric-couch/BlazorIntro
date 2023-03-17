@@ -1,0 +1,14 @@
+﻿@if (Movie is not null)
+{
+    <h2>@Movie.Title</h2>
+    <h4>Director: @Movie.Director</h4>
+    <h4>Awards: @Movie.Awards</h4>
+    if (Movie?.Ratings is not null) {
+        <h4>Ratings</h4>
+        @foreach (var rating in Movie.Ratings)
+        {
+            <h5>@rating.Source: @rating.Value</h5>
+        }
+    }
+    <a href="https://www.imdb.com/title/@Movie.imdbID" target="_blank"><img src="@Movie.Poster" height="120" /></a>
+}

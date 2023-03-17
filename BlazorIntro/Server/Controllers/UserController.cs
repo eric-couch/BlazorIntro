@@ -30,7 +30,7 @@ namespace BlazorIntro.Server.Controllers
                             .Select(u => new UserDto
                             {
                                 Id = u.Id,
-                                UserName = u.UserName,
+                                UserName = u.UserName!,
                                 FirstName = u.FirstName,
                                 LastName = u.LastName,
                                 FavoriteMovies = u.FavoriteMovies

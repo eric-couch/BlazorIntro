@@ -12,9 +12,10 @@ namespace BlazorIntro.Client.Pages
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
         public List<OMDBMovie> MovieDetails { get; set; } = new();
+        public OMDBMovie MovieAllDetails { get; set; } = new();
         public UserDto User { get; set; } = new UserDto();
         private readonly string OMDBAPIUrl = "https://www.omdbapi.com/?apikey=";
-        private readonly string OMDBAPIKey = "";
+        private readonly string OMDBAPIKey = "86c39163";
         protected override async Task OnInitializedAsync()
         {
             var UserAuth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
@@ -27,6 +28,12 @@ namespace BlazorIntro.Client.Pages
                     MovieDetails.Add(movieDetails);
                 }
             }
+        }
+
+        private async Task ShowMovieDetails(OMDBMovie movie)
+        {
+            MovieAllDetails = movie;
+            await Task.CompletedTask;
         }
     }
 }
