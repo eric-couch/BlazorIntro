@@ -1,11 +1,11 @@
 ﻿@page "/"
 @inject ToastService toastService
-
-<button class="btn btn-info" @onclick="@(() => toastService.ShowToast("I'm an INFO message", ToastLevel.Info, 2000))">Info Toast</button>
-<button class="btn btn-success" @onclick="@(() => toastService.ShowToast("I'm a SUCCESS message", ToastLevel.Success, 2000))">Success Toast</button>
-<button class="btn btn-warning" @onclick="@(() => toastService.ShowToast("I'm a WARNING message", ToastLevel.Warning, 2000))">Warning Toast</button>
-<button class="btn btn-danger" @onclick="@(() => toastService.ShowToast("I'm an ERROR message", ToastLevel.Error, 2000))">Error Toast</button>
-
+@*
+<button class="btn btn-info" @onclick="@(() => toastService.ShowToast("I'm an INFO message", ToastLevel.Info, 5000))">Info Toast</button>
+<button class="btn btn-success" @onclick="@(() => toastService.ShowToast("I'm a SUCCESS message", ToastLevel.Success, 5000))">Success Toast</button>
+<button class="btn btn-warning" @onclick="@(() => toastService.ShowToast("I'm a WARNING message", ToastLevel.Warning, 5000))">Warning Toast</button>
+<button class="btn btn-danger" @onclick="@(() => toastService.ShowToast("I'm an ERROR message", ToastLevel.Error, 5000))">Error Toast</button>
+*@
 
 @if (User?.FavoriteMovies is not null) {
     <h2>Favorite Movies</h2>

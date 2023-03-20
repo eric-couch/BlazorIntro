@@ -45,5 +45,21 @@ namespace BlazorIntro.Server.Controllers
             return Ok(movies);
         }
 
+        [HttpPost]
+        [Route("api/add-movie")]
+        public async Task<ActionResult> AddMovie([FromBody] Movie movie)
+        {
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            user.FavoriteMovies.Add(movie);
+            await _userManager.UpdateAsync(user);
+
+            return Ok();
+        }
+
     }
 }

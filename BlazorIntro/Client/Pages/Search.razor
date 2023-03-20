@@ -1,4 +1,7 @@
 ﻿@page "/search"
+@inject ToastService toastService
+@using Microsoft.AspNetCore.Components.QuickGrid
+
 
 <label>Search</label>
 <div class="container-fluid mb-5">
@@ -14,9 +17,14 @@
 
 @if (OMDBMovies is not null)
 {
-    @foreach (var item in OMDBMovies)
-    {
-        <h4>@item.Title (@item.Year)</h4>
-       <br />
-    }
+    <QuickGrid Items="@movies">
+        <PropertyColumn Property="@(m => m.imdbID)" />
+        <PropertyColumn Property="@(m => m.Title)" />
+        <PropertyColumn Property="@(m => m.Year)" />
+        <TemplateColumn Title="Add movie">
+            <button @onclick="@(() => AddMovie(context))">Add Movie</button>
+        </TemplateColumn>
+    </QuickGrid>
+    <button @onclick="NextPage">Next Page</button>
+    <p><strong>@message</strong></p>
 }
