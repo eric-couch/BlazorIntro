@@ -1,6 +1,7 @@
 ﻿using BlazorIntro.Client.Services;
 using BlazorIntro.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Net.Http.Json;
 
@@ -11,30 +12,38 @@ namespace BlazorIntro.Client.Pages
         [Inject]
         HttpClient Http { get; set; } = new();
         private string SearchTitle = String.Empty;
-        private List<MovieSearchResultItems> OMDBMovies = new();
+        private List<MovieSearchResultItems>? OMDBMovies = null;
 
         IQueryable<MovieSearchResultItems> movies { get; set; }
 
         private readonly string OMDBAPIUrl = "https://www.omdbapi.com/?apikey=";
         private readonly string OMDBAPIKey = "86c39163";
         private int pageNum = 1;
+        private int totalPages = 2;
+        private int totalResults = 0;
         string message = string.Empty;
-
-        private async Task SearchOMBD()
+        private async Task SearchOMDB()
         {
-            //MovieSearchResult? movieResult = await Http.GetFromJsonAsync<MovieSearchResult>($"{OMDBAPIUrl}{OMDBAPIKey}&s={SearchTitle}&p={pageNum}");
-            //if (movieResult is not null)
-            //{
-            //    //OMDBMovies = movieResult.Search.ToList();
-            //    movies = movieResult.Search.AsQueryable();
-            //}
             await GetMovies();
+            StateHasChanged();
         }
 
         private async Task NextPage()
         {
-            pageNum++;
-            await GetMovies();
+            if (pageNum < totalPages)
+            {
+                pageNum++;
+                await GetMovies();
+            }
+        }
+
+        private async Task PreviousPage()
+        {
+            if (pageNum > 1)
+            {
+                pageNum--;
+                await GetMovies();
+            }
         }
 
         private async Task GetMovies()
@@ -42,10 +51,19 @@ namespace BlazorIntro.Client.Pages
             MovieSearchResult? movieResult = await Http.GetFromJsonAsync<MovieSearchResult>($"{OMDBAPIUrl}{OMDBAPIKey}&s={SearchTitle}&page={pageNum}");
             if (movieResult is not null)
             {
-                //OMDBMovies = movieResult.Search.ToList();
                 movies = movieResult.Search.AsQueryable();
+                
+                if (Double.TryParse(movieResult.totalResults, out double total))
+                {
+                    totalResults = (int)total;
+                    totalPages = (int)Math.Ceiling(total / 10);
+                } else
+                {
+                    totalPages = 1;
+                }
             }
         }
+
 
         private async void AddMovie(MovieSearchResultItems m)
         {

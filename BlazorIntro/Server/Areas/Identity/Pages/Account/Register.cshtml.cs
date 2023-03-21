@@ -123,11 +123,22 @@ namespace BlazorIntro.Server.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
+                
+                
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    //if (Input.UserType == "D")
+                    //{
+                    //    _userManager.AddToRoleAsync(user, "Doctor");
+                    //}
+                    //else if (Input.UserType == "P")
+                    //{
+                    //    _userManager.AddToRoleAsync(user, "Patient");
+                    //}
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

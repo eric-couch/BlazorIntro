@@ -17,6 +17,9 @@
                 <li><a href="#" @onclick="@(() => ShowMovieDetails(movie))"
            @onclick:preventDefault="true" style="text-decoration:none;color:black;">
                     @movie.Title (@movie.Year)<br />Actors (@movie.Actors)</a>
+                    <button type="button" @onclick="(() => RemoveFavoriteMovie(movie))">
+                        Delete
+                    </button>
                 </li>
             }
         }  
@@ -24,4 +27,8 @@
     @if (MovieAllDetails is not null) {
         <MovieDetails Movie="MovieAllDetails" />
     }
+
+    <button type="button" @onclick="(() => CheckAdminStatus())">check admin</button>
+    <div>@message</div>
+       
 }

@@ -6,25 +6,53 @@
 <label>Search</label>
 <div class="container-fluid mb-5">
     <div class="row">
-        <div class="col-9">
+        <div class="col-2">
             <InputText @bind-Value="SearchTitle" />
         </div>
-        <div class="col-3">
-            <button @onclick="SearchOMBD">Submit</button>
+        <div class="col-1">
+            <button type="submit" @onclick="SearchOMDB">Submit</button>
+        </div>
+        <div class="col-9">
         </div>
     </div>
 </div>
-
 @if (OMDBMovies is not null)
 {
-    <QuickGrid Items="@movies">
-        <PropertyColumn Property="@(m => m.imdbID)" />
-        <PropertyColumn Property="@(m => m.Title)" />
-        <PropertyColumn Property="@(m => m.Year)" />
-        <TemplateColumn Title="Add movie">
-            <button @onclick="@(() => AddMovie(context))">Add Movie</button>
-        </TemplateColumn>
-    </QuickGrid>
-    <button @onclick="NextPage">Next Page</button>
-    <p><strong>@message</strong></p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <QuickGrid Items="@movies">
+                    <PropertyColumn Property="@(m => m.Title)" />
+                    <PropertyColumn Property="@(m => m.Year)" />
+                    <TemplateColumn Title="Add movie">
+                        <button @onclick="@(() => AddMovie(context))">Add Movie</button>
+                    </TemplateColumn>
+                </QuickGrid>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                @if (pageNum > 1)
+                {
+                    <button @onclick="PreviousPage">&lt;</button>
+                }
+            </div>
+            <div class="col-md-4">
+                Page: @pageNum
+            </div>
+            <div class="col-md-1">
+                @if (pageNum < totalPages)
+                {
+                    <button @onclick="NextPage">&gt;</button>
+                }
+            </div>
+        </div>
+        @if (totalResults > 0) {
+            <div class="row">
+                <div class="col-md-6">
+                    Total Results: @totalResults
+                </div>
+            </div>
+        }
+    </div>
 }

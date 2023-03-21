@@ -61,5 +61,36 @@ namespace BlazorIntro.Server.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("api/remove-movie")]
+        public async Task<ActionResult> RemoveMovie([FromBody] Movie movie)
+        {
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var movieToRemove = _context.Movies.FirstOrDefault(m => m.imdbId == movie.imdbId);
+            user.FavoriteMovies.Remove(movieToRemove);
+            _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [Route("api/get-admin-status")]
+        public async Task<IActionResult> GetAdminStatus() {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+            if (isAdmin) {
+                return Ok("You are an admin");
+            } else
+            {
+                return Unauthorized("You are not authroized to access this resource.");
+            }
+        }
+        
     }
 }
