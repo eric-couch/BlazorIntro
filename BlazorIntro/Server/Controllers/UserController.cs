@@ -71,16 +71,18 @@ namespace BlazorIntro.Server.Controllers
                 return NotFound();
             }
 
-            var movieToRemove = _context.Movies.FirstOrDefault(m => m.imdbId == movie.imdbId);
-            user.FavoriteMovies.Remove(movieToRemove);
+            var movieToRemove = _context.Users.Include(u => u.FavoriteMovies)
+            .FirstOrDefault(u => u.Id == user.Id)
+            .FavoriteMovies.FirstOrDefault(m => m.imdbId == movie.imdbId);
+
+            _context.Movies.Remove(movieToRemove);
             _context.SaveChangesAsync();
             return Ok();
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [HttpGet]
         [Route("api/get-admin-status")]
-        public async Task<IActionResult> GetAdminStatus() {
+        public async Task<ActionResult> GetAdminStatus() {
             var currentUser = await _userManager.GetUserAsync(User);
 
             var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");

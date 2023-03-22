@@ -37,9 +37,12 @@ namespace BlazorIntro.Client.Pages
             await Task.CompletedTask;
         }
 
+
+
         //CheckAdminStatus()
         private async Task CheckAdminStatus()
         {
+            
             var ret = await Http.GetFromJsonAsync<string>("api/get-admin-status");
             message = ret;
         }

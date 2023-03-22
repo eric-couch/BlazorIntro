@@ -130,16 +130,6 @@ namespace BlazorIntro.Server.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
-                    //if (Input.UserType == "D")
-                    //{
-                    //    _userManager.AddToRoleAsync(user, "Doctor");
-                    //}
-                    //else if (Input.UserType == "P")
-                    //{
-                    //    _userManager.AddToRoleAsync(user, "Patient");
-                    //}
-
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

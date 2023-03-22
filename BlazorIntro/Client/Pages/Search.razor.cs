@@ -14,7 +14,7 @@ namespace BlazorIntro.Client.Pages
         private string SearchTitle = String.Empty;
         private List<MovieSearchResultItems>? OMDBMovies = null;
 
-        IQueryable<MovieSearchResultItems> movies { get; set; }
+        IQueryable<MovieSearchResultItems>? movies { get; set; } = null;
 
         private readonly string OMDBAPIUrl = "https://www.omdbapi.com/?apikey=";
         private readonly string OMDBAPIKey = "86c39163";
