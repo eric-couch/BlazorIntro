@@ -40,11 +40,15 @@ namespace BlazorIntro.Client.Pages
 
 
         //CheckAdminStatus()
-        private async Task CheckAdminStatus()
+        private async Task GetRoles()
         {
-            
-            var ret = await Http.GetFromJsonAsync<string>("api/get-admin-status");
-            message = ret;
+            string roles = string.Empty;
+            var ret = await Http.GetAsync("api/get-roles");
+            //foreach (var item in ret.Content)
+            //{
+            //    roles += $"{item}<br />";
+            //}
+            message = ret.Content.ReadAsStringAsync().Result;
         }
 
         private async Task RemoveFavoriteMovie(OMDBMovie movie)

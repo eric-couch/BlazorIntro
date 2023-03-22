@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorIntro.Server.Controllers
 {
-    [Authorize]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -80,19 +79,46 @@ namespace BlazorIntro.Server.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [Route("api/get-admin-status")]
-        public async Task<ActionResult> GetAdminStatus() {
-            var currentUser = await _userManager.GetUserAsync(User);
+        //[HttpGet]
+        //[Route("api/get-admin-status")]
+        //public async Task<ActionResult> GetAdminStatus() {
+        //    var currentUser = await _userManager.GetUserAsync(User);
 
-            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
-            if (isAdmin) {
-                return Ok("You are an admin");
-            } else
+        //    var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+        //    if (isAdmin) {
+        //        return Ok("You are an admin");
+        //    } else
+        //    {
+        //        return Unauthorized("You are not authroized to access this resource.");
+        //    }
+        //}
+
+        [HttpGet]
+        [Route("api/get-roles")]
+        public async Task<IActionResult> GetUserRoles()
+        {
+            try
             {
-                return Unauthorized("You are not authroized to access this resource.");
+                // Get the current user
+                var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                // Get the roles for the current user
+                var roles = await _userManager.GetRolesAsync(user);
+
+                return Ok(roles);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                //all parameters are optional:
+                detail: "Error while retrieving roles.", //an explanation, ex.Stacktrace, ...
+                //instance: $"/user/{user.id}"  //A reference that identifies the specific occurrence of the problem
+                title: "An error occured.", //a short title, maybe ex.Message
+                statusCode: StatusCodes.Status500InternalServerError //will always return code 500 if not explicitly set
+                //type: "http://example.com/errors/error-123-details"  //a reference to more information
+                );
             }
         }
-        
+
     }
 }
