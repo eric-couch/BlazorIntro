@@ -1,34 +1,28 @@
 ﻿@page "/"
 @inject ToastService toastService
-@*
-<button class="btn btn-info" @onclick="@(() => toastService.ShowToast("I'm an INFO message", ToastLevel.Info, 5000))">Info Toast</button>
-<button class="btn btn-success" @onclick="@(() => toastService.ShowToast("I'm a SUCCESS message", ToastLevel.Success, 5000))">Success Toast</button>
-<button class="btn btn-warning" @onclick="@(() => toastService.ShowToast("I'm a WARNING message", ToastLevel.Warning, 5000))">Warning Toast</button>
-<button class="btn btn-danger" @onclick="@(() => toastService.ShowToast("I'm an ERROR message", ToastLevel.Error, 5000))">Error Toast</button>
-*@
 
-@if (User?.FavoriteMovies is not null) {
+@if (MovieDetails?.Any() ?? false)
+{
     <h2>Favorite Movies</h2>
     <ul>
-        @if (MovieDetails is not null)
+        
+        @foreach (var movie in MovieDetails)
         {
-            @foreach (var movie in MovieDetails)
-            {
-                <li><a href="#" @onclick="@(() => ShowMovieDetails(movie))"
-           @onclick:preventDefault="true" style="text-decoration:none;color:black;">
-                    @movie.Title (@movie.Year)<br />Actors (@movie.Actors)</a>
-                    <button type="button" @onclick="(() => RemoveFavoriteMovie(movie))">
-                        Delete
-                    </button>
-                </li>
-            }
-        }  
+            <li><a href="#" @onclick="@(() => ShowMovieDetails(movie))"
+        @onclick:preventDefault="true" style="text-decoration:none;color:black;">
+                @movie.Title (@movie.Year)<br />Actors (@movie.Actors)</a>
+                <button type="button" @onclick="(() => RemoveFavoriteMovie(movie))">
+                    Delete
+                </button>
+            </li>
+        }
+ 
     </ul>
     @if (MovieAllDetails is not null) {
         <MovieDetails Movie="MovieAllDetails" />
     }
 
-    <button type="button" @onclick="(() => GetRoles())">check admin</button>
-    <div>@message</div>
+    @*<button type="button" @onclick="(() => GetRoles())">check admin</button>
+    <div>@message</div>*@
        
 }
