@@ -1,6 +1,15 @@
 ﻿@page "/"
 @inject ToastService toastService
 
+<AuthorizeView>
+    <Authorized>
+        <p>Hello, @context.User.Identity.Name</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You haven't logged in, so there are no favorite movies</p>
+    </NotAuthorized>
+</AuthorizeView>
+
 @if (MovieDetails?.Any() ?? false)
 {
     <h2>Favorite Movies</h2>

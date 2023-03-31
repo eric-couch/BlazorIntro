@@ -8,8 +8,8 @@ namespace BlazorIntro.Client.Pages
 {
     public partial class Index
     {
-        //[Inject]
-        //public HttpClient Http { get; set; } = new();
+        [Inject]
+        public HttpClient Http { get; set; } = new();
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
         [Inject]
@@ -42,5 +42,7 @@ namespace BlazorIntro.Client.Pages
             StateHasChanged();
             await Task.CompletedTask;
         }
+
+        
     }
 }

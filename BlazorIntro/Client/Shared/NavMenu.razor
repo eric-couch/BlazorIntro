@@ -14,18 +14,63 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="search">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Search
-            </NavLink>
-        </div>
+@*        @if (IsAuthenticated)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="search">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Search
+                </NavLink>
+            </div>
+        }*@
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="search">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Search
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Admin">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="users">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> User Admin
+                </NavLink>
+            </div>
+        </AuthorizeView>
     </nav>
 </div>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+    [Inject]
+    private AuthenticationStateProvider? authenticationStateProvider { get; set; }
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private bool IsAuthenticated { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //if (authenticationState is not null)
+        //{
+        //    var authState = await authenticationState;
+        //    var user = authState?.User;
+        //    //IsAuthenticated = user.Identity.IsAuthenticated;
+        //    IsAuthenticated = authState.User.Identity.IsAuthenticated;
+        //}
+        
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            IsAuthenticated = true;
+        }
+        
+    }
 
     private void ToggleNavMenu()
     {

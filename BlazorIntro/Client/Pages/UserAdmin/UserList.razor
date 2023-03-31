@@ -1,0 +1,43 @@
+﻿@page "/users"
+
+<h1>Users</h1>
+
+<p>
+    <NavLink class="btn btn-primary" href="create-user">
+        Add User
+    </NavLink>
+    <NavLink class="btn btn-primary" href="create-role">
+        Add Role
+    </NavLink>
+    <NavLink class="btn btn-primary" href="manage-role">
+        Manage Roles
+    </NavLink>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email/Username</th>
+            <th>Roles</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in users)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>
+                    @foreach (var role in user.Roles)
+                    {
+                        <p class="primary">@role.Name</p>
+                    }
+                </td>
+                <td>
+                    <NavLink class="btn btn-primary" href="@($"edit-user/{user.Id}")">Edit</NavLink>
+                    <NavLink class="btn btn-danger" href="@($"delete-user/{user.Id}")">Delete</NavLink>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

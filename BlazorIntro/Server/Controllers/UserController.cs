@@ -20,8 +20,7 @@ public class UserController : Controller
         _userManager = userManager;
     }
 
-    [HttpGet]
-    [Route("api/get-movies")]
+    [HttpGet("api/get-movies")]
     public async Task<ActionResult<List<Movie>>> GetMovies()
     {
         var movies = await _context.Users
@@ -81,6 +80,7 @@ public class UserController : Controller
     
     [HttpGet]
     [Route("api/get-roles")]
+    [Authorize(Roles="Admin")]
     public async Task<IActionResult> GetUserRoles()
     {
         try
