@@ -7,5 +7,11 @@ namespace BlazorIntro.Client.Pages
     {
         [Parameter]
         public OMDBMovie? Movie { get; set; }
+        [Parameter]
+        public EventCallback<OMDBMovie> OnRemoveFavoriteMovie { get; set; }
+        private async Task RemoveFavoriteMovie(OMDBMovie Movie)
+        {
+            await OnRemoveFavoriteMovie.InvokeAsync(Movie);
+        }
     }
 }

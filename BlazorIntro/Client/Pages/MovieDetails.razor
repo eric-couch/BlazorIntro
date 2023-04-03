@@ -15,6 +15,7 @@
                 </ul>
             }
             <a href="https://www.imdb.com/title/@Movie.imdbID" target="_blank" class="btn btn-primary">IMDB</a>
+            <button class="btn btn-primary" @onclick="@(() => RemoveFavoriteMovie(@Movie))">Remove</button>
         </div>
     </div>
 }

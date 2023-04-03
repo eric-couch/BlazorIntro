@@ -51,7 +51,6 @@ namespace BlazorIntro.Client.Pages
         
         private async Task RemoveFavoriteMovie(OMDBMovie movie)
         {
-            //await Http.PostAsJsonAsync("api/remove-movie", movie.imdbID);
             await UserMoviesHttpRepository.RemoveMovie(movie.imdbID);
             MovieDetails.Remove(movie);
             StateHasChanged();

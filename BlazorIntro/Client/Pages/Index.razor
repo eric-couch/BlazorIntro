@@ -17,14 +17,14 @@
         @for (int index = 0; index < MovieDetails.Count; index+=numCols) {
             <div class="row gy-3">
                 <div class="col-md-@(12/numCols)">
-                            <MovieDetails Movie="MovieDetails[index]" />
+                    <MovieDetails Movie="MovieDetails[index]" OnRemoveFavoriteMovie="RemoveFavoriteMovie" />
                         </div>
                 @for (int col = 1; col < numCols-1; col++)
                 {
                     if (index + col < MovieDetails.Count)
                     {
                         <div class="col-md-@(12/numCols)">
-                            <MovieDetails Movie="MovieDetails[index + col]" />
+                            <MovieDetails Movie="MovieDetails[index + col]" OnRemoveFavoriteMovie="RemoveFavoriteMovie" />
                         </div>
                     }
                 }
