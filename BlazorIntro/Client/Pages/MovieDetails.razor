@@ -1,15 +1,20 @@
 ﻿@if (Movie is not null)
 {
-    <h2>@Movie.Title</h2>
-    <h4>Director: @Movie.Director</h4>
-    <h4>Awards: @Movie.Awards</h4>
-    <h4>Genre(s): @Movie.Genre</h4>
-    if (Movie?.Ratings is not null) {
-        <h4>Ratings</h4>
-        @foreach (var rating in Movie.Ratings)
-        {
-            <h5>@rating.Source: @rating.Value</h5>
-        }
-    }
-    <a href="https://www.imdb.com/title/@Movie.imdbID" target="_blank"><img src="@Movie.Poster" height="120" /></a>
+    <div class="card">
+        <img src="@Movie.Poster" class="card-img-top" alt="@Movie.Title" />
+        <div class="card-body">
+            <h5>@Movie.Title (@Movie.Year)</h5>
+            @*<p class="card-text">@Movie.Plot</p>*@
+            @if (Movie?.Ratings is not null) {
+                <h6>Ratings</h6>
+                <ul class="list-group list-group-flush">
+                @foreach (var rating in Movie.Ratings)
+                {
+                    <li class="list-group-item">@rating.Source: @rating.Value</li>
+                }
+                </ul>
+            }
+            <a href="https://www.imdb.com/title/@Movie.imdbID" target="_blank" class="btn btn-primary">IMDB</a>
+        </div>
+    </div>
 }

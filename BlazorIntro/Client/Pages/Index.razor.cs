@@ -18,6 +18,7 @@ namespace BlazorIntro.Client.Pages
         public List<OMDBMovie> MovieDetails { get; set; } = new();
         public OMDBMovie MovieAllDetails { get; set; } = new();
         public UserDto User { get; set; } = new UserDto();
+        public int numCols = 6;
         protected override async Task OnInitializedAsync()
         {
             try

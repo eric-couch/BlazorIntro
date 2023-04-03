@@ -13,25 +13,22 @@
 @if (MovieDetails?.Any() ?? false)
 {
     <h2>Favorite Movies</h2>
-    <ul>
-        
-        @foreach (var movie in MovieDetails)
-        {
-            <li><a href="#" @onclick="@(() => ShowMovieDetails(movie))"
-        @onclick:preventDefault="true" style="text-decoration:none;color:black;">
-                @movie.Title (@movie.Year)<br />Actors (@movie.Actors)</a>
-                <button type="button" @onclick="(() => RemoveFavoriteMovie(movie))">
-                    Delete
-                </button>
-            </li>
+    <div class="container">
+        @for (int index = 0; index < MovieDetails.Count; index+=numCols) {
+            <div class="row gy-3">
+                <div class="col-md-@(12/numCols)">
+                            <MovieDetails Movie="MovieDetails[index]" />
+                        </div>
+                @for (int col = 1; col < numCols-1; col++)
+                {
+                    if (index + col < MovieDetails.Count)
+                    {
+                        <div class="col-md-@(12/numCols)">
+                            <MovieDetails Movie="MovieDetails[index + col]" />
+                        </div>
+                    }
+                }
+            </div>
         }
- 
-    </ul>
-    @if (MovieAllDetails is not null) {
-        <MovieDetails Movie="MovieAllDetails" />
-    }
-
-    @*<button type="button" @onclick="(() => GetRoles())">check admin</button>
-    <div>@message</div>*@
-       
+    </div>
 }
