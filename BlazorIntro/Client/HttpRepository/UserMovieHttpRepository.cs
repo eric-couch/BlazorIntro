@@ -3,7 +3,7 @@ using BlazorIntro.Shared;
 using BlazorIntro.Shared.Wrappers;
 using System.Net.Http.Json;
 using System.Net;
-
+using System.Text.Json;
 
 namespace BlazorIntro.Client.HttpRepository;
 
@@ -41,6 +41,45 @@ public class UserMoviesHttpRepository : IUserMoviesHttpRepository
                 };
             }
             return new DataResponse<List<OMDBMovie>>();
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.Message.Contains(HttpStatusCode.Unauthorized.ToString())) {
+                return new DataResponse<List<OMDBMovie>>()
+                {
+                    Errors = new Dictionary<string, string[]> { { "Not Authroized", new string[] { "User does not have authroization." } } },
+                    Succeeded = false,
+                    Message = "Not Authroized",
+                    Data = new List<OMDBMovie>()
+                };
+            }
+            return new DataResponse<List<OMDBMovie>>()
+            {
+                Errors = new Dictionary<string, string[]> { { "Connection Issue", new string[] { "There was an issue connecting to the server." } } },
+                Succeeded = false,
+                Message = "Connection Issue",
+                Data = new List<OMDBMovie>()
+            };
+        }
+        catch (NotSupportedException)
+        {
+            return new DataResponse<List<OMDBMovie>>()
+            {
+                Errors = new Dictionary<string, string[]> { { "Not Supported", new string[] { "This content type is not support." } } },
+                Succeeded = false,
+                Message = "Not Supported",
+                Data = new List<OMDBMovie>()
+            };
+        }
+        catch (JsonException)
+        {
+            return new DataResponse<List<OMDBMovie>>()
+            {
+                Errors = new Dictionary<string, string[]> { { "Invalid Json", new string[] { "The JSON is invalid." } } },
+                Succeeded = false,
+                Message = "Invalid Json",
+                Data = new List<OMDBMovie>()
+            };
         }
         catch (Exception ex)
         {
