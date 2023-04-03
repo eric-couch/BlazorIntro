@@ -3,6 +3,7 @@ using BlazorIntro.Client.HttpRepository;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Json;
+using BlazorIntro.Shared.Wrappers;
 
 namespace BlazorIntro.Client.Pages
 {
@@ -17,15 +18,28 @@ namespace BlazorIntro.Client.Pages
         public List<OMDBMovie> MovieDetails { get; set; } = new();
         public OMDBMovie MovieAllDetails { get; set; } = new();
         public UserDto User { get; set; } = new UserDto();
-        
-        private string message = string.Empty;
         protected override async Task OnInitializedAsync()
         {
-            var UserAuth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
-            if (UserAuth is not null && UserAuth.IsAuthenticated)
+            try
             {
-                MovieDetails = await UserMoviesHttpRepository.GetMovies();
+                var UserAuth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
+                if (UserAuth is not null && UserAuth.IsAuthenticated)
+                {
+                    //MovieDetails = await UserMoviesHttpRepository.GetMovies();
+                    DataResponse<List<OMDBMovie>> dataResponse = await UserMoviesHttpRepository.GetMovies();
+                    if (dataResponse.Succeeded)
+                    {
+                        MovieDetails = dataResponse.Data;
+                    } else
+                    {
+                        toastService.ShowToast($"Error: {dataResponse.Message}", Services.ToastLevel.Error, 5000);
+                    }
+                }
+            } catch
+            {
+                toastService.ShowToast("Retrieving favorite movie list failed!", Services.ToastLevel.Error, 5000);
             }
+            
         }
 
         private async Task ShowMovieDetails(OMDBMovie movie)

@@ -1,5 +1,6 @@
 ﻿using BlazorIntro.Client.Pages;
 using BlazorIntro.Shared;
+using BlazorIntro.Shared.Wrappers;
 using System.Net.Http.Json;
 using System.Net;
 
@@ -19,20 +20,38 @@ public class UserMoviesHttpRepository : IUserMoviesHttpRepository
     }
     
     
-    public async Task<List<OMDBMovie>> GetMovies()
+    public async Task<DataResponse<List<OMDBMovie>>> GetMovies()
     {
-        var MovieDetails = new List<OMDBMovie>();
-        UserDto? User = await _httpClient.GetFromJsonAsync<UserDto>("api/get-movies");
-        if (User?.FavoriteMovies?.Any() ?? false)
+        try
         {
-            foreach (var movie in User.FavoriteMovies)
+            var MovieDetails = new List<OMDBMovie>();
+            UserDto? User = await _httpClient.GetFromJsonAsync<UserDto>("api/get-movies");
+            if (User?.FavoriteMovies?.Any() ?? false)
             {
-                var movieDetails = await _httpClient.GetFromJsonAsync<OMDBMovie>($"{OMDBAPIUrl}{OMDBAPIKey}&i={movie.imdbId}");
-                MovieDetails.Add(movieDetails!);
+                foreach (var movie in User.FavoriteMovies)
+                {
+                    var movieDetails = await _httpClient.GetFromJsonAsync<OMDBMovie>($"{OMDBAPIUrl}{OMDBAPIKey}&i={movie.imdbId}");
+                    MovieDetails.Add(movieDetails!);
+                }
+                return new DataResponse<List<OMDBMovie>>()
+                {
+                    Data = MovieDetails,
+                    Message = "Success",
+                    Succeeded = true
+                };
             }
-            return MovieDetails;
+            return new DataResponse<List<OMDBMovie>>();
         }
-        return new List<OMDBMovie>();
+        catch (Exception ex)
+        {
+            return new DataResponse<List<OMDBMovie>>()
+            {
+                Errors = new Dictionary<string, string[]> { { ex.Message, new string[] { ex.Message } } },
+                Succeeded = false,
+                Message = ex.Message,
+                Data = new List<OMDBMovie>()
+            };
+        }
 
     }
     //Task<MovieSearchResult> SearchMovies(string title, int page);

@@ -36,7 +36,8 @@ namespace BlazorIntro.Client.Test
             client.BaseAddress = new Uri("https://localhost:7113/");
             var userMoviesHttpRepository = new UserMoviesHttpRepository(client);
             // Act
-            var movies = await userMoviesHttpRepository.GetMovies();
+            var response = await userMoviesHttpRepository.GetMovies();
+            var movies = response.Data;
 
             // Assert
             Assert.That(movies.Count(), Is.EqualTo(2));

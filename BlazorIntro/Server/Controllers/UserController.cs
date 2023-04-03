@@ -23,6 +23,7 @@ public class UserController : Controller
     [HttpGet("api/get-movies")]
     public async Task<ActionResult<List<Movie>>> GetMovies()
     {
+        var user = await _userManager.FindByNameAsync(User.Identity.Name);
         var movies = await _context.Users
                         .Include(m => m.FavoriteMovies)
                         .Select(u => new UserDto
@@ -33,8 +34,8 @@ public class UserController : Controller
                             LastName = u.LastName,
                             FavoriteMovies = u.FavoriteMovies
                         })
-                        .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
-        
+                        .FirstOrDefaultAsync(u => u.Id == user.Id);
+
         if (movies == null)
         {
             return NotFound();
@@ -47,7 +48,7 @@ public class UserController : Controller
     [Route("api/add-movie")]
     public async Task<ActionResult> AddMovie([FromBody] Movie movie)
     {
-        var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var user = await _userManager.FindByNameAsync(User.Identity.Name);
         if (user == null)
         {
             return NotFound();
@@ -63,7 +64,7 @@ public class UserController : Controller
     [Route("api/remove-movie")]
     public async Task<ActionResult> RemoveMovie([FromBody] Movie movie)
     {
-        var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var user = await _userManager.FindByNameAsync(User.Identity.Name);
         if (user == null)
         {
             return NotFound();
